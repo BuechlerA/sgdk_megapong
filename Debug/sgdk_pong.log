@@ -1,0 +1,38 @@
+﻿  C:/sgdk/bin/mkdir -p src/boot
+  C:/sgdk/bin/mkdir -p out
+  C:/sgdk/bin/mkdir -p out/src
+  C:/sgdk/bin/mkdir -p out/res
+  C:/sgdk/bin/gcc -m68000 -Wall -Wextra -Wno-shift-negative-value -fno-builtin -Iinc -Isrc -Ires -IC:/sgdk/inc -IC:/sgdk/res -BC:/sgdk/bin -O3 -fuse-linker-plugin -fno-web -fno-gcse -fno-unit-at-a-time -fomit-frame-pointer -flto -c main.c -o out/main.o
+  main.c: In function 'moveBall':
+main.c(171,4): warning G14B797B8: implicit declaration of function 'PlaySound' [-Wimplicit-function-declaration]
+      PlaySound();
+      ^~~~~~~~~
+  main.c: At top level:
+main.c(420,6): warning G8BE29D73: conflicting types for 'PlaySound'
+   void PlaySound()
+        ^~~~~~~~~
+  main.c:171:4: note: previous implicit declaration of 'PlaySound' was here
+      PlaySound();
+      ^~~~~~~~~
+  main.c: In function 'stateMenu':
+main.c(440,16): warning G15CAB38F: passing argument 1 of 'XGM_startPlay' from incompatible pointer type [-Wincompatible-pointer-types]
+    XGM_startPlay(&jam_music);
+                  ^
+  In file included from C:/sgdk/inc/genesis.h:42:0,
+                   from main.c:1:
+  C:/sgdk/inc/xgm.h:40:6: note: expected 'const u8 * {aka const unsigned char *}' but argument is of type 'const u8 (*)[116480] {aka const unsigned char (*)[116480]}'
+   void XGM_startPlay(const u8 *song);
+        ^~~~~~~~~~~~~
+main.c(443,2): warning GAF631DAE: statement with no effect [-Wunused-value]
+    for (i; i < NUM_OPTIONS; i++)
+    ^~~
+  echo "out/res/resources.o out/main.o" > out/cmd_
+  C:/sgdk/bin/gcc -BC:/sgdk/bin -n -T C:/sgdk/md.ld -nostdlib out/sega.o @out/cmd_ C:/sgdk/lib/libmd.a C:/sgdk/lib/libgcc.a -o out/rom.out
+  C:/sgdk/src/string.c: In function 'sprintf.constprop':
+C:/sgdk/src/string.c(639,5): warning G8447F918: second parameter of 'va_start' not last named argument [-Wvarargs]
+       va_start(args, fmt);
+       ^
+  C:/sgdk/bin/rm out/cmd_
+  C:/sgdk/bin/objcopy -O binary out/rom.out out/rom.bin
+  C:/sgdk/bin/sizebnd out/rom.bin -sizealign 131072
+  C:/sgdk/bin/nm --plugin=liblto_plugin-0.dll -n out/rom.out > out/symbol.txt
